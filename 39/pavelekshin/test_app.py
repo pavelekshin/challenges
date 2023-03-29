@@ -19,7 +19,7 @@ def create_app():
     # other setup can go here
     yield app
     # clean up / reset resources here
-
+    app.run = False
 
 @pytest.fixture()
 def client(create_app):
@@ -28,8 +28,10 @@ def client(create_app):
 
 def test_get_items(client):
     req = client.get(BASE_URL)
+    # check BASE_URL request
     assert req.status_code == 200
     data = json.loads(req.data)
+    # check BASE_URL response items
     assert len(data["items"]) == 3
 
 
@@ -115,3 +117,4 @@ def test_delete_item(client):
     # delete exist item
     req = client.delete(GOOD_ITEM_URL)
     assert req.status_code == 204
+
